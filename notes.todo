@@ -1,0 +1,38 @@
+☐ List the dishes, for example vegan pho. And then when the user clicks on the food item, we list the nearby restaurants the offer the item
+☐ Look into Google Map API
+   ☐ Is there a restaurant id or business id we can get from Google?
+   ☐ List the restaurants and sort them by distance from my current location
+        ✔ Experiment with Distance Matrix API @done(25-01-27 22:26)
+        ☐ How do we pass in multiple destinations?
+            ☐ Distance Matrix API only pick up the 1 address even though we passed in 3
+                ☐ How to encode multiple addresses properly using the requests library
+        ✔ Create models for Restaurant and Menu Item (Food, Drink and Dessert) @done(25-02-05 17:16)
+            ✔ Run makemigrations and start populating restaurant values @done(25-02-05 17:16)
+   ☐ Just start populating vegan restaurant addresses and zipcodes
+        ☐ What does the command 'gcloud auth application-default print-access-token' do and how can we get the same access token with the python api?
+        ☐ Make a list of vegan restaurants in Dallas and store their locations (long+lat)
+        ☐ Then use Google Map API to look up the address and calculate the distance between the user's current location and the restaurant
+            ☐ Pass this info to the backend and to the Google Map API to find the restaurants closest to the user's location.
+                ☐ Include name, address, and distance to the user.
+☐ It would be difficult to pull back all the restaurants from the database and all the addresses to the Distance Matrix API.
+    ☐ Then what would be the best way to find the closest restaurants? 
+        ☐ Calculate distance using latitude and longitude, and then pull back the closest restaurant
+        ✔ SELECT id, acos(sin(radians(latitude)) * sin(radians(32.9192404)) + cos(radians(latitude)) * cos(radians(32.9192404)) * cos(radians(-96.7751877) - radians(longitude))) * 6371 FROM theveganmenu_restaurant; @done(25-02-03 21:18)
+    
+☐ Create a local postgres database server 
+            
+ 
+
+☐ Develop a database
+
+☐ Focus on Houston and Dallas
+☐ Food display order: by most popular restaurants and proximity to the user
+
+Features:
+    ☐ Need to be able to look up restaurants by user's current location or zipcode
+    ☐ Need to know which vegan dishes are offered at a particular restaurant
+    ☐ 
+Layout:
+    ☐ Mobile-friend design
+
+    

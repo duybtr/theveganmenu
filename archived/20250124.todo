@@ -1,0 +1,9 @@
+✔ Script to obtain the user current position @done(24-12-30 15:02)
+✔ Script to make POST request @done(25-01-24 20:41)
+    ✔ Getting 401 Unauthorized @done(25-01-22 21:11)
+    ✔ Try a more simple request @done(25-01-22 21:11). Use json instead of data for request body
+    ✔ Create HTMX request to pass in the user current position, and load some data @done(25-01-24 20:32)
+    ✔ HTMX request was able to call the view method, but no data was passed in @done(25-01-24 20:32)
+        ✔ Add some dummy data to the hidden inputs and reload the page @done(25-01-24 20:32)
+    ✔ There is script that loads the longitude and lattitude to the hidden inputs. We need to wait for the script to runs first, and then execute the HTMX requests @done(25-01-24 20:41)
+

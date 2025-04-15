@@ -1,0 +1,16 @@
+main {
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+}
+
+.restaurant-card {
+    border: solid black 1px;
+    border-radius: 30px;
+    margin-bottom: 30px;
+    box-shadow: 10px 5px 5px rgb(149, 146, 146);
+}
+
+.restaurant-card-menu {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}

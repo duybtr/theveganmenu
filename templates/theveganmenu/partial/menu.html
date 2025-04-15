@@ -1,0 +1,7 @@
+{% load dictionary_extras %}
+
+{% for menu_item in menu|lookup:restaurant.id %}
+    <p>{{ menu_item.item_name }}</p>
+{% endfor %}
+
+

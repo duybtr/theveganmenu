@@ -1,0 +1,9 @@
+{% load dictionary_extras %}
+{% if menu|lookup:restaurant.id|length > 0 %}
+    <h1><a href="{{ restaurant.link }}">{{ restaurant.name }}</a></h1>
+    {{restaurant.address}}  {{ restaurant.distance }} miles</p>
+    {% for menu_item in menu|lookup:restaurant.id %}
+        <p>{{ menu_item.item_name }}</p>
+    {% endfor %}
+{% endif %}
+

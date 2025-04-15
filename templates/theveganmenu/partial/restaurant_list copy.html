@@ -1,0 +1,23 @@
+{% load dictionary_extras %}
+<div id="query_result">
+  <main>
+    <div>
+        <h1>Food</h1>
+        {% for restaurant in restaurants %}
+            {% include 'theveganmenu/partial/menu.html' with menu=foods restaurant=restaurant%}
+        {% endfor %}
+    </div>
+    <div>
+        <h1>Dessert</h1>
+        {% for restaurant in restaurants %}
+            {% include 'theveganmenu/partial/menu.html' with menu=desserts restaurant=restaurant%}
+        {% endfor %}
+    </div>
+    <div>
+        <h1>Beverage</h1>
+        {% for restaurant in restaurants %}
+            {% include 'theveganmenu/partial/menu.html' with menu=beverages restaurant=restaurant%}
+        {% endfor %}
+    </div>
+  </main>
+</div>

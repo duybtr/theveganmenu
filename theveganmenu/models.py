@@ -11,6 +11,7 @@ class Restaurant(models.Model):
 
 class MenuItem(models.Model):
     item_name = models.CharField(max_length=300)
+    item_description = models.CharField(max_length=2000, blank=True, default='')
     restaurant = models.ForeignKey(
         Restaurant,
         on_delete = models.CASCADE,
@@ -21,4 +22,4 @@ class MenuItem(models.Model):
                ('beverage','beverage'),
                ('dessert','dessert')]
     item_type = models.CharField(max_length=20, choices=choices)
-    additional_info = models.CharField(max_length=2000)
+    additional_info = models.CharField(max_length=5000, default='', blank=True)

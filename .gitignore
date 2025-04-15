@@ -1,0 +1,10 @@
+config/.env
+**/__pycache__
+#*/migrations
+staticfiles
+*.log
+/cloud_keys
+.venv
+.bat
+.todo
+old

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Restaurant, MenuItem
+from .models import Restaurant, RestaurantChain, Menu, MenuSection, MenuItem
 
 # Register your models here.
-admin.site.register([Restaurant, MenuItem])
+admin.site.register([Restaurant, RestaurantChain, Menu, MenuSection, MenuItem])

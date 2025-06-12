@@ -3,26 +3,15 @@
 {% for restaurant in restaurants %}
 <div class="restaurant-card">
     <div class="restaurant-card-header">
-        <h1><a href="{{ restaurant.link }}">{{ restaurant.name }}</a></h1>
+        <h1><a href="{{ restaurant.link }}">{{ restaurant.name }} {% if restaurant.is_fully_vegan %}Ⓥ{% endif %} </a></h1>
         {{restaurant.address}}  {{ restaurant.distance }} miles</p>
     </div>
-    <div class="restaurant-card-menu">
-        <div>
-            <h1>Appetizer</h1> 
-        </div>
-        <div>
-            <h1>Food</h1>
-            {% include 'theveganmenu/partial/menu.html' with menu=foods restaurant=restaurant %}
-        </div>
-        <div>
-            <h1>Dessert</h1>
-            {% include 'theveganmenu/partial/menu.html' with menu=desserts restaurant=restaurant %}
-        </div>
-        <div>
-            <h1>Beverage</h1>
-            {% include 'theveganmenu/partial/menu.html' with menu=beverages restaurant=restaurant %}
-        </div>
+    {% if restaurant.menu %}
+    <div class="restaurant-card-menu" 
+        hx-swap="innerHTML"
+        hx-post="{% url 'get_menu_sections' restaurant.menu.id %}"
+        hx-trigger="load">
     </div>
+    {% endif %}
 </div>
-    
 {% endfor %}

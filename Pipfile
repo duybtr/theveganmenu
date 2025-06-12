@@ -9,6 +9,7 @@ requests = "*"
 google-cloud-logging = "*"
 psycopg2-binary = "*"
 google-cloud-secret-manager = "*"
+django-allauth = {extras = ["socialaccount"], version = "*"}
 
 [dev-packages]
 

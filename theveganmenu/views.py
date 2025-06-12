@@ -1,13 +1,15 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .models import Restaurant, MenuItem
+from .models import Restaurant, MenuItem, Menu, MenuSection
 from django.db import connection
-from django.db.models import Q
+from django.db.models import F, Q, DecimalField, FloatField
+from django.db.models.functions.math import ACos, Sin, Cos, Radians
+from django.db.models.functions import Cast, Round
 import requests
 from django.http import HttpResponse
 from theveganmenu.common.utils import access_secret_version
 from theveganmenu.management.commands.populate_long_lat import get_long_lat
-
+from decimal import Decimal
 
 # Create your views here.
 class HomePageView(TemplateView):
@@ -17,22 +19,24 @@ def get_restaurants(request):
     
     context = {}
 
-    user_lng = float(request.POST['userLng'])
-    user_lat = float(request.POST['userLat'])
+    user_lng = Decimal(request.POST['userLng'])
+    user_lat = Decimal(request.POST['userLat'])
 
     # Need to replace hardcoded latitude and longitude
-    with connection.cursor() as cursor:
-        cursor.execute(f"SELECT id, name, address, link , acos(sin(radians({user_lat})) * sin(radians(32.9192404)) + cos(radians({user_lat})) * cos(radians(32.9192404)) * cos(radians({user_lng}) - radians(longitude))) * 6371 * 0.621371 AS distance FROM theveganmenu_restaurant ORDER BY distance LIMIT 3") 
-        rows = cursor.fetchall()
-    restaurant_ids = [r[0] for r in rows]
-    restaurants = [{'id' : rows[i][0],
-                 'name' : rows[i][1],
-                 'address': rows[i][2], 
-                 'link': rows[i][3],
-                 'distance': rows[i][4]}  
-                    for i in range(len(rows))]
-    context['restaurants'] = restaurants
+    # with connection.cursor() as cursor:
+    #     cursor.execute(f"SELECT id, name, address, link , acos(sin(radians({user_lat})) * sin(radians(lattitude)) + cos(radians({user_lat})) * cos(radians(lattitude)) * cos(radians({user_lng}) - radians(longitude))) * 6371 * 0.621371 AS distance FROM theveganmenu_restaurant ORDER BY distance LIMIT 4") 
+    #     rows = cursor.fetchall()
     
+    restaurants = Restaurant.objects.annotate(distance = Round(Cast(ACos(Sin(Radians(user_lat)) * Sin(Radians('latitude')) + Cos(Radians(user_lat)) * Cos(Radians('latitude')) * Cos(Radians(user_lng) - Radians('longitude'))) * 6371 * Decimal(0.621371), output_field=FloatField()), precision=2))
+    # restaurant_ids = [r[0] for r in rows]
+    # restaurants = [{'id' : rows[i][0],
+    #              'name' : rows[i][1],
+    #              'address': rows[i][2], 
+    #              'link': rows[i][3],
+    #              'distance': rows[i][4]}  
+    #                 for i in range(len(rows))]
+    restaurants = restaurants.order_by('distance')
+    context['restaurants'] = restaurants
     return render(request, 'theveganmenu/partial/restaurant_list.html', context)
 
 def get_menu_dict(menu_list):
@@ -97,25 +101,42 @@ def get_menu(request):
                     for i in range(len(rows))]
 
     q = q & Q(restaurant_id__in = restaurant_ids)
-    q_food = q & Q(item_type = 'food')
-    q_beverage = q & Q(item_type = 'beverage')
-    q_dessert = q & Q(item_type = 'dessert')
-    menu_items = MenuItem.objects.all()
-    food_items = menu_items.filter(q_food)
-    beverage_items = menu_items.filter(q_beverage)
-    dessert_items = menu_items.filter(q_dessert)
+    menus = Menu.objects.all()
+    menus = menus.filter(q)
+    menu_sections = MenuSection.objects.filter(menu__in=menus)
+    menu_items = MenuItem.objects.filter(menu_section__in=menu_sections)
+    # q_food = q & Q(item_type = 'food')
+    # q_beverage = q & Q(item_type = 'beverage')
+    # q_dessert = q & Q(item_type = 'dessert')
+    # menu_items = MenuItem.objects.all()
+    # food_items = menu_items.filter(q_food)
+    # beverage_items = menu_items.filter(q_beverage)
+    # dessert_items = menu_items.filter(q_dessert)
 
-    food_items_dict = get_menu_dict(food_items)
-    beverage_items_dict = get_menu_dict(beverage_items)
-    dessert_items_dict = get_menu_dict(dessert_items)
+    # food_items_dict = get_menu_dict(food_items)
+    # beverage_items_dict = get_menu_dict(beverage_items)
+    # dessert_items_dict = get_menu_dict(dessert_items)
     
      # for each restaurant display the restaurants below
      # Add api key
-    context = {'restaurants': restaurants, 
-               'foods': food_items_dict, 
-               'beverages': beverage_items_dict, 
-               'desserts':dessert_items_dict}
+    # context = {'restaurants': restaurants, 
+    #            'foods': food_items_dict, 
+    #            'beverages': beverage_items_dict, 
+    #            'desserts':dessert_items_dict}
     return render(request, 'theveganmenu/partial/restaurant_list.html', context)
+
+def get_menu_sections(request,menu_id):
+    #import pdb; pdb.set_trace()
+    context = {}
+    menu_sections = MenuSection.objects.filter(menu_id=menu_id)
+    context['menu_sections'] = menu_sections
+    return render(request, 'theveganmenu/partial/menu_sections.html', context)
+
+def get_menu_items(request, menu_section_id):
+    context = {}
+    menu_items = MenuItem.objects.filter(menu_section_id = menu_section_id)
+    context['menu_items'] = menu_items
+    return render(request, 'theveganmenu/partial/menu_items.html', context)
 
 
 

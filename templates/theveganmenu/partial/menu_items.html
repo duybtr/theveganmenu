@@ -1,0 +1,5 @@
+{% load custom_cap %}
+
+{% for menu_item in menu_items %}
+<li>{{menu_item.item_name|cap_every_word}}</li>
+{% endfor %}

@@ -1,0 +1,12 @@
+.outer {
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: solid;
+    gap: 10px;
+    background-color: yellow;
+}
+.inner {
+    border: solid;
+    background-color: green;
+}

@@ -29,6 +29,13 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',  
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +46,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'theveganmenu',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.microsoft',
+    'allauth.socialaccount.providers.twitter'
 ]
 
 MIDDLEWARE = [
@@ -49,6 +63,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+     # Add the account middleware:
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -81,6 +98,7 @@ DATABASES = {
             'NAME': 'theveganmenu',
             'USER': 'postgres',
             'PASSWORD': 'postgres',
+            'PORT': 5433
     }
 }
 

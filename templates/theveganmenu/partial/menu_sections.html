@@ -1,0 +1,8 @@
+{% for menu_section in menu_sections %}
+    <div class="menu-section">
+        <div class="section-header">{{menu_section.name}}</div>
+        <div class="section-body" hx-get="{% url 'get_menu_items' menu_section.id %}" hx-trigger="load">
+
+        </div>
+    </div>
+{% endfor %}

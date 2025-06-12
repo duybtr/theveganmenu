@@ -1,23 +1,28 @@
 {% load dictionary_extras %}
-<div id="query_result">
-  <main>
-    <div>
-        <h1>Food</h1>
-        {% for restaurant in restaurants %}
-            {% include 'theveganmenu/partial/menu.html' with menu=foods restaurant=restaurant%}
-        {% endfor %}
+
+{% for restaurant in restaurants %}
+<div class="restaurant-card">
+    <div class="restaurant-card-header">
+        <h1><a href="{{ restaurant.link }}">{{ restaurant.name }}</a></h1>
+        {{restaurant.address}}  {{ restaurant.distance }} miles</p>
     </div>
-    <div>
-        <h1>Dessert</h1>
-        {% for restaurant in restaurants %}
-            {% include 'theveganmenu/partial/menu.html' with menu=desserts restaurant=restaurant%}
-        {% endfor %}
+    <div class="restaurant-card-menu">
+        <div>
+            <h1>Appetizer</h1> 
+        </div>
+        <div>
+            <h1>Food</h1>
+            {% include 'theveganmenu/partial/menu.html' with menu=foods restaurant=restaurant %}
+        </div>
+        <div>
+            <h1>Dessert</h1>
+            {% include 'theveganmenu/partial/menu.html' with menu=desserts restaurant=restaurant %}
+        </div>
+        <div>
+            <h1>Beverage</h1>
+            {% include 'theveganmenu/partial/menu.html' with menu=beverages restaurant=restaurant %}
+        </div>
     </div>
-    <div>
-        <h1>Beverage</h1>
-        {% for restaurant in restaurants %}
-            {% include 'theveganmenu/partial/menu.html' with menu=beverages restaurant=restaurant%}
-        {% endfor %}
-    </div>
-  </main>
 </div>
+    
+{% endfor %}

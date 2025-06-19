@@ -3,7 +3,7 @@
 {% for restaurant in restaurants %}
 <div class="restaurant-card">
     <div class="restaurant-card-header">
-        <h1><a href="{{ restaurant.link }}">{{ restaurant.name }} {% if restaurant.is_fully_vegan %}Ⓥ{% endif %} </a></h1>
+        <h1>{{ restaurant.name }} {% if restaurant.is_fully_vegan %}Ⓥ{% endif %}</h1>
         {{restaurant.address}}  {{ restaurant.distance }} miles</p>
     </div>
     {% if restaurant.menu %}

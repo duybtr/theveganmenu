@@ -23,7 +23,7 @@ main {
 }
 
 .section-body {
-    border: solid #eee 1px; 
+    /* border: solid #eee 1px;  */
     /* border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px; */
     padding-left: 15px;
@@ -32,7 +32,7 @@ main {
 
 .restaurant-card {
     margin-top: 30px;
-    border: #495057;
+    border: 2px solid #495057;
     background-color: #1b1f22;
     border-radius: 8px;
     /* box-shadow: 0 2px 5px rgba(0,0,0,0.1); */
@@ -40,9 +40,23 @@ main {
 
 .restaurant-card-header {
     padding: 15px;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #eee;
+    display: flex;
+    /* background-color: #f9f9f9;
+    border-bottom: 1px solid #eee; */
 }
+
+.restaurant-card-header a {
+    color: white;
+    text-decoration: none;
+}
+.restaurant-card-header a:hover {
+    color: white;
+}
+
+.distance {
+    margin-left: auto;
+}
+
 
 .restaurant-card-menu {
     padding: 5px;

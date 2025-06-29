@@ -13,7 +13,7 @@
         <div id="main-content">
             <form id="user_location" hx-target='#query_result' hx-include="[name='userLng'],[name='userLat']" hx-post="get_restaurants"  hx-swap="outerHTML" hx-trigger="submit">
                 <label for="address">Enter an address or cross-street</label>
-                <input id="address" name="address" />
+                <input id="address" name="address" autocomplete="address"/>
                 <button>Go</button>
             </form>
             <div id="query_result" hx-include="[name='userLng'],[name='userLat']" hx-post="get_restaurants"  hx-swap="outerHTML" hx-trigger="customLoad"></div>

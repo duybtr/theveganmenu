@@ -1,10 +1,15 @@
 {% load dictionary_extras %}
+{% load static %}
 
 {% for restaurant in restaurants %}
 <div class="restaurant-card">
     <div class="restaurant-card-header">
-        <h1>{{ restaurant.name }} {% if restaurant.is_fully_vegan %}Ⓥ{% endif %}</h1>
-        {{restaurant.address}}  {{ restaurant.distance }} miles</p>
+        <a href='{{restaurant.website_link}}'><h1>{{ restaurant.name }} {% if restaurant.is_fully_vegan %}Ⓥ{% endif %}</h1></a>
+        
+        
+        <div class="distance">{{ restaurant.distance }} miles </div>
+        <a href='{{restaurant.map_link}}'><img width=50 height=50 src="{% static 'images/google_map_icon.png' %}" /></a>
+        
     </div>
     {% if restaurant.menu %}
     <div class="restaurant-card-menu" 

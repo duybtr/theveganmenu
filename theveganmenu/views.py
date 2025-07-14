@@ -19,22 +19,15 @@ def get_restaurants(request):
     
     context = {}
 
-    user_lng = Decimal(request.POST['userLng'])
-    user_lat = Decimal(request.POST['userLat'])
-
-    # Need to replace hardcoded latitude and longitude
-    # with connection.cursor() as cursor:
-    #     cursor.execute(f"SELECT id, name, address, link , acos(sin(radians({user_lat})) * sin(radians(lattitude)) + cos(radians({user_lat})) * cos(radians(lattitude)) * cos(radians({user_lng}) - radians(longitude))) * 6371 * 0.621371 AS distance FROM theveganmenu_restaurant ORDER BY distance LIMIT 4") 
-    #     rows = cursor.fetchall()
+    lng = Decimal(request.POST['userLng'])
+    lat = Decimal(request.POST['userLat'])
+    address = None
+    if 'address' in request.POST.keys():
+        address = request.POST['address']
+    if not address is None and len(address) > 0:
+        lng, lat = get_long_lat(address)
     
-    restaurants = Restaurant.objects.annotate(distance = Round(Cast(ACos(Sin(Radians(user_lat)) * Sin(Radians('latitude')) + Cos(Radians(user_lat)) * Cos(Radians('latitude')) * Cos(Radians(user_lng) - Radians('longitude'))) * 6371 * Decimal(0.621371), output_field=FloatField()), precision=2))
-    # restaurant_ids = [r[0] for r in rows]
-    # restaurants = [{'id' : rows[i][0],
-    #              'name' : rows[i][1],
-    #              'address': rows[i][2], 
-    #              'link': rows[i][3],
-    #              'distance': rows[i][4]}  
-    #                 for i in range(len(rows))]
+    restaurants = Restaurant.objects.annotate(distance = Round(Cast(ACos(Sin(Radians(lat)) * Sin(Radians('latitude')) + Cos(Radians(lat)) * Cos(Radians('latitude')) * Cos(Radians(lng) - Radians('longitude'))) * 6371 * Decimal(0.621371), output_field=FloatField()), precision=2))
     restaurants = restaurants.order_by('distance')
     context['restaurants'] = restaurants
     return render(request, 'theveganmenu/partial/restaurant_list.html', context)
@@ -74,56 +67,56 @@ def get_beverage_menu(request, restaurant_pk):
     print(context)
     return render(request, 'theveganmenu/partial/menu.html', context)
 
-def get_menu(request):
-    q = Q()
-    # Get the list of 20 closest restaurants
-    # Retrieve the menu items, filtered by the restaurant ids above. Divide them into 3 separate lists (food, dessert, beverage)
-    context = {}
+# def get_menu(request):
+#     q = Q()
+#     # Get the list of 20 closest restaurants
+#     # Retrieve the menu items, filtered by the restaurant ids above. Divide them into 3 separate lists (food, dessert, beverage)
+#     context = {}
 
-    user_lng = float(request.POST['userLng'])
-    user_lat = float(request.POST['userLat'])
-    address = None
-    if 'address' in request.POST.keys():
-        address = request.POST['address']
-    if not address is None and len(address) > 0:
-        user_lng, user_lat = get_long_lat(address)
-    # Need to replace hardcoded latitude and longitude
-    with connection.cursor() as cursor:
-        cursor.execute(f"SELECT id, name, address, link , round((acos(sin(radians({user_lat})) * sin(radians(latitude)) + cos(radians({user_lat})) * cos(radians(latitude)) * cos(radians({user_lng}) - radians(longitude))) * 6371 * 0.621371)::numeric,2) AS distance FROM theveganmenu_restaurant ORDER BY distance LIMIT 3") 
-        rows = cursor.fetchall()
-    restaurant_ids = [r[0] for r in rows]
+#     lng = float(request.POST['userLng'])
+#     lat = float(request.POST['userLat'])
+#     address = None
+#     if 'address' in request.POST.keys():
+#         address = request.POST['address']
+#     if not address is None and len(address) > 0:
+#         lng, lat = get_long_lat(address)
+#     # Need to replace hardcoded latitude and longitude
+#     with connection.cursor() as cursor:
+#         cursor.execute(f"SELECT id, name, address, link , round((acos(sin(radians({lat})) * sin(radians(latitude)) + cos(radians({lat})) * cos(radians(latitude)) * cos(radians({lng}) - radians(longitude))) * 6371 * 0.621371)::numeric,2) AS distance FROM theveganmenu_restaurant ORDER BY distance LIMIT 3") 
+#         rows = cursor.fetchall()
+#     restaurant_ids = [r[0] for r in rows]
 
-    restaurants = [{'id' : rows[i][0],
-                 'name' : rows[i][1],
-                 'address': rows[i][2], 
-                 'link': rows[i][3],
-                 'distance': rows[i][4]}  
-                    for i in range(len(rows))]
+#     restaurants = [{'id' : rows[i][0],
+#                  'name' : rows[i][1],
+#                  'address': rows[i][2], 
+#                  'link': rows[i][3],
+#                  'distance': rows[i][4]}  
+#                     for i in range(len(rows))]
 
-    q = q & Q(restaurant_id__in = restaurant_ids)
-    menus = Menu.objects.all()
-    menus = menus.filter(q)
-    menu_sections = MenuSection.objects.filter(menu__in=menus)
-    menu_items = MenuItem.objects.filter(menu_section__in=menu_sections)
-    # q_food = q & Q(item_type = 'food')
-    # q_beverage = q & Q(item_type = 'beverage')
-    # q_dessert = q & Q(item_type = 'dessert')
-    # menu_items = MenuItem.objects.all()
-    # food_items = menu_items.filter(q_food)
-    # beverage_items = menu_items.filter(q_beverage)
-    # dessert_items = menu_items.filter(q_dessert)
+#     q = q & Q(restaurant_id__in = restaurant_ids)
+#     menus = Menu.objects.all()
+#     menus = menus.filter(q)
+#     menu_sections = MenuSection.objects.filter(menu__in=menus)
+#     menu_items = MenuItem.objects.filter(menu_section__in=menu_sections)
+#     # q_food = q & Q(item_type = 'food')
+#     # q_beverage = q & Q(item_type = 'beverage')
+#     # q_dessert = q & Q(item_type = 'dessert')
+#     # menu_items = MenuItem.objects.all()
+#     # food_items = menu_items.filter(q_food)
+#     # beverage_items = menu_items.filter(q_beverage)
+#     # dessert_items = menu_items.filter(q_dessert)
 
-    # food_items_dict = get_menu_dict(food_items)
-    # beverage_items_dict = get_menu_dict(beverage_items)
-    # dessert_items_dict = get_menu_dict(dessert_items)
+#     # food_items_dict = get_menu_dict(food_items)
+#     # beverage_items_dict = get_menu_dict(beverage_items)
+#     # dessert_items_dict = get_menu_dict(dessert_items)
     
-     # for each restaurant display the restaurants below
-     # Add api key
-    # context = {'restaurants': restaurants, 
-    #            'foods': food_items_dict, 
-    #            'beverages': beverage_items_dict, 
-    #            'desserts':dessert_items_dict}
-    return render(request, 'theveganmenu/partial/restaurant_list.html', context)
+#      # for each restaurant display the restaurants below
+#      # Add api key
+#     # context = {'restaurants': restaurants, 
+#     #            'foods': food_items_dict, 
+#     #            'beverages': beverage_items_dict, 
+#     #            'desserts':dessert_items_dict}
+#     return render(request, 'theveganmenu/partial/restaurant_list.html', context)
 
 def get_menu_sections(request,menu_id):
     #import pdb; pdb.set_trace()

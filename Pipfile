@@ -10,6 +10,7 @@ google-cloud-logging = "*"
 psycopg2-binary = "*"
 google-cloud-secret-manager = "*"
 django-allauth = {extras = ["socialaccount"], version = "*"}
+pyyaml = "*"
 
 [dev-packages]
 

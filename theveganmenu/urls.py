@@ -1,5 +1,7 @@
 from .views import (
     HomePageView,
+    AddRestaurantView,
+    AddRestaurantConfirmationView,
     get_restaurants,
     get_food_menu,
     get_dessert_menu,
@@ -11,6 +13,8 @@ from django.urls import path
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
+    path('add_restaurant', AddRestaurantView.as_view(), name='add_restaurant'),
+    path('add_restaurant_confirmation', AddRestaurantConfirmationView.as_view(), name='add_restaurant_confirmation'),
     path('get_restaurants', get_restaurants, name='get_restaurants'),
     path('<int:restaurant_pk>/get_food_menu', get_food_menu, name='get_food_menu'),
     path('<int:restaurant_pk>/get_dessert_menu', get_dessert_menu, name='get_dessert_menu'),

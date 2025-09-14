@@ -3,6 +3,10 @@ main {
     grid-template-columns: 25% 50% 25%;
 }
 
+nav {
+    margin-bottom: 20px;
+}
+
 #content {
     display: grid;
     grid-template-rows: 30px 5px auto;
@@ -17,11 +21,6 @@ main {
 #user_location {
     margin: 0px;
 }
-.main-header 
-/* .main-header div {
-    border: solid;
-} */
-
 
 .section-header {
     border: solid #eee 1px; 
@@ -37,7 +36,7 @@ main {
 }
 
 .section-body {
-    /* border: solid #eee 1px;  */
+    border: dotted #eee 1px; 
     /* border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px; */
     padding-left: 15px;

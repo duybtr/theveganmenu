@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.views.generic.edit import CreateView
 from .models import Restaurant, MenuItem, Menu, MenuSection
+from .forms import CreateRestaurantForm
 from django.db import connection
 from django.db.models import F, Q, DecimalField, FloatField
 from django.db.models.functions.math import ACos, Sin, Cos, Radians
@@ -10,10 +12,26 @@ from django.http import HttpResponse
 from theveganmenu.common.utils import access_secret_version
 from theveganmenu.management.commands.populate_long_lat import get_long_lat
 from decimal import Decimal
+from django.urls import reverse, reverse_lazy
 
 # Create your views here.
 class HomePageView(TemplateView):
     template_name = 'home.html'
+
+
+class AddRestaurantView(CreateView):
+    model = Restaurant
+    form_class = CreateRestaurantForm
+    template_name = 'theveganmenu/add_restaurant.html'
+    success_url = reverse_lazy('add_restaurant_confirmation')
+
+class AddRestaurantConfirmationView(TemplateView):
+    template_name = 'theveganmenu/add_restaurant_confirmation.html'
+
+def add_restaurants(request):
+    context = {}
+    form = CreateRestaurantForm()
+    return render(request, 'theveganmenu/partial/add_restaurant.html', context)
 
 def get_restaurants(request):
     
@@ -31,6 +49,8 @@ def get_restaurants(request):
     restaurants = restaurants.order_by('distance')
     context['restaurants'] = restaurants
     return render(request, 'theveganmenu/partial/restaurant_list.html', context)
+
+
 
 def get_menu_dict(menu_list):
     menu_dict = {}

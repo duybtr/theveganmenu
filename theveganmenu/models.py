@@ -35,6 +35,7 @@ class Restaurant(models.Model):
     is_fully_vegan = models.BooleanField(default=False)
     address = models.CharField(max_length=300)
     website_link = models.CharField(max_length=500)
+    menu_link = models.CharField(max_length=500)
     map_link = models.CharField(max_length=500)
     longitude = models.DecimalField(max_digits=20, decimal_places=13, default=0)
     latitude = models.DecimalField(max_digits=20, decimal_places=13, default=0)
